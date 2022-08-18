@@ -8,12 +8,12 @@ router.get('/', (req, res) => {
   // Finds all tags with the corresponding data, as well as its associated Product data
   Tag.findAll({
     attributes: ['id', 'tag_name'],
-    include: {
+    include: [{
       model: Product,
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
       through: ProductTag,
       as: 'products'
-    }
+    }]
   })
 
     // Sends back data retrieved from database
@@ -32,12 +32,12 @@ router.get('/:id', (req, res) => {
   Tag.findOne({
     attributes: ['id', 'tag_name'],
     where: { id: req.params.id },
-    include: {
+    include: [{
       model: Product,
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
       through: ProductTag,
       as: 'products'
-    }
+    }]
   })
 
     // Checks to see if any data was retrieved given the requested parameters. Returns a 404 error if nothing was found, otherwise returns the requested data
@@ -103,7 +103,7 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  
+
     // Checks to see if any data was retrieved given the requested parameters. Returns a 404 error if nothing was found, otherwise deletes the requested data
     .then(dbData => {
       if (!dbData) {
