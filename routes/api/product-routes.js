@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
     include: [
       {
         model: Category,
-        attributes: ['id', 'category_id']
+        attributes: ['id', 'category_name']
       },
       {
         model: Tag,
@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
 
     //Catches any errors
     .catch(err => {
-      console.err(err);
+      console.log(err);
       res.status(500).json(err);
     });
 });
@@ -43,8 +43,8 @@ router.get('/:id', (req, res) => {
     where: { id: req.params.id },
     include: [
       {
-        model: Product,
-        attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+        model: Category,
+        attributes: ['id', 'category_name'],
       },
       {
         model: Tag,
@@ -60,7 +60,7 @@ router.get('/:id', (req, res) => {
 
     // Catches any errors
     .catch(err => {
-      console.err(err);
+      console.log(err);
       res.status(500).json(err);
     })
 });
@@ -82,7 +82,7 @@ router.post('/', (req, res) => {
     price: req.body.price,
     stock: req.body.stock,
     category_id: req.body.category_id,
-    tagIds: req.body.tag_ids
+    tagIds: req.body.tag_Ids
   })
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -169,7 +169,7 @@ router.delete('/:id', (req, res) => {
     res.json(dbData);
   })
   .catch(err => {
-    console.err(err);
+    console.log(err);
     res.status(500).json(err);
   });
 });
