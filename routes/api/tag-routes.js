@@ -31,7 +31,7 @@ router.get('/:id', (req, res) => {
   // Finds a single tag with the corresponding data, as well as its associated Product data
   Tag.findOne({
     attributes: ['id', 'tag_name'],
-    where: {id: req.params.id},
+    where: { id: req.params.id },
     include: {
       model: Product,
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
@@ -62,7 +62,11 @@ router.post('/', (req, res) => {
     id: req.body.id,
     tag_name: req.body.tag_name
   })
+
+    // Sends back data retrieved from database
     .then(dbData => res.json(dbData))
+
+    // Catches any errors
     .catch(err => {
       console.err(err);
       res.status(400).json(err);
@@ -72,9 +76,11 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
   Tag.update(
-    {tag_name: req.body.tag_name},
-    {where: {id: req.params.id}}
+    { tag_name: req.body.tag_name },
+    { where: { id: req.params.id } }
   )
+
+    // Checks to see if any data was retrieved given the requested parameters. Returns a 404 error if nothing was found, otherwise updates the requested data
     .then(dbData => {
       if (!dbData) {
         res.status(404).json({ message: 'No tag with specified id found.' });
@@ -82,6 +88,8 @@ router.put('/:id', (req, res) => {
       }
       res.json(dbData);
     })
+
+    // Catches any errors
     .catch(err => {
       console.err(err);
       res.status(500).json(err);
@@ -95,17 +103,21 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then(dbData => {
-    if (!dbData) {
-      res.status(404).json({ message: 'No tag with specified id found.' });
-      return;
-    }
-    res.json(dbData);
-  })
-  .catch(err => {
-    console.err(err);
-    res.status(500).json(err);
-  });
+  
+    // Checks to see if any data was retrieved given the requested parameters. Returns a 404 error if nothing was found, otherwise deletes the requested data
+    .then(dbData => {
+      if (!dbData) {
+        res.status(404).json({ message: 'No tag with specified id found.' });
+        return;
+      }
+      res.json(dbData);
+    })
+
+    // Catches any errors
+    .catch(err => {
+      console.err(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
